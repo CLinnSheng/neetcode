@@ -8,46 +8,48 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-
-class Solution {
-public:
-    ListNode* removeNthFromEnd(ListNode* head, int n) 
+#include <vector>
+class Solution
+{
+  public:
+    ListNode *removeNthFromEnd(ListNode *head, int n)
     {
-        // Just iterate through the list
-        // easiest way is stored in side an array
-        // then just reconnect for the removed nodes
+        // Quite straight forward question
+        // But we need to handle edge cases
+        // What if the node is the first element?
+        // What if the node is the last element?
 
-        ListNode* temp = head;
-        std::vector<ListNode*> nodes;
-
+        // First we keep all the nodes in an array
+        // So we can access any of the nodes in the LL easily
+        std::vector<ListNode *> nodes;
+        ListNode *temp = head;
         while (temp)
         {
             nodes.push_back(temp);
             temp = temp->next;
         }
 
+        // Now we find the node we want to remove
         int size = nodes.size();
         int index = size - n;
 
-        if (size == 1 && index == 0) 
-        {
-            return nullptr;
-        }
-
-        // First Node
+        // First index
         if (index == 0)
         {
-            return nodes[1];
+            return head->next;
         }
-        // Last Node
-        else if (index == size - 1)
+
+        // Last index
+        if (index == size - 1)
         {
-            nodes[index - 1]->next = nullptr;
+            nodes[size - 2]->next = nullptr;
+            return head;
         }
-        else
-        {
-            nodes[index - 1]->next = nodes[index + 1];
-        }
+
+        // In between, jsut reconnect the nodes
+        ListNode *prev = nodes[index - 1];
+        ListNode *next = nodes[index + 1];
+        prev->next = next;
 
         return head;
     }
